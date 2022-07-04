@@ -1,0 +1,4 @@
+Programacion de cuarto,PRO,Luis,MJ,1,3
+Estructura,EDA2,Luis,IV,5,7
+Base,BD,Magdalena,MI,5,7
+base de datos,BDA,Maria,LI,7,9
