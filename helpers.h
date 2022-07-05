@@ -16,6 +16,14 @@ void pausa(){
     cin.get();
 }
 
+void espacios(int longitudPalabra, int limite){
+    while(longitudPalabra<limite){
+        cout << "\t";
+        longitudPalabra=longitudPalabra+8;
+    }
+    cout << "|";
+}
+
 int convertirCadenaAEntero(string cadena){
     int entero;
     stringstream conversor;

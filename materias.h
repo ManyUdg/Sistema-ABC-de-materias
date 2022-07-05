@@ -162,14 +162,6 @@ void listarMaterias(){
     }
 }
 
-void espacios(int longitudPalabra, int limite){
-    while(longitudPalabra<limite){
-        cout << "\t";
-        longitudPalabra=longitudPalabra+8;
-    }
-    cout << "|";
-}
-
 void consultarMateria(){
     int i;
     cout << "*****CONSULTAR UNA MATERIA*****" << endl;
@@ -298,16 +290,14 @@ void guardarMaterias(){
     if(cantidadMaterias!=C_0){
         archivo.open(NOMBRE_ARCHIVO_TXT);
         if(archivo.is_open()){
+            archivo << cantidadMaterias << DELIMITADOR_CAMPOS;
             for(int i=0; i<cantidadMaterias; i++){
                 archivo << materias[i]->getNombre() << DELIMITADOR_CAMPOS;
                 archivo << materias[i]->getAcronimoMateria() << DELIMITADOR_CAMPOS;
                 archivo << materias[i]->getNombreProfesor() << DELIMITADOR_CAMPOS;
                 archivo << materias[i]->getDiasDeLaSemana() << DELIMITADOR_CAMPOS;
                 archivo << materias[i]->getHoraInicio() << DELIMITADOR_CAMPOS;
-                archivo << materias[i]->getHoraFin();
-                if(i!=cantidadMaterias-1){
-                    archivo << DELIMITADOR_REGISTROS;
-                }
+                archivo << materias[i]->getHoraFin() << DELIMITADOR_REGISTROS;
             }
             archivo.close();
             cout << "Datos guardados con exito" << endl;
@@ -323,44 +313,51 @@ void cargarArchivo(){
     ifstream archivo;
     string cadena, subCadena;
     char subCadenaChar[C_100];
-    char caracter;
+    char separador;
     char vacio[] = "";
     int posInicio, posFinal;
+    Materia** tmp;
     archivo.open(NOMBRE_ARCHIVO_TXT);
     if(archivo.is_open()){
-        while(!archivo.eof()){
-            materias[cantidadMaterias]= new Materia(vacio, vacio, vacio, vacio, 0, 0);
+        archivo >> cantidadMaterias;
+        archivo >> separador;
+        if(cantidadMaterias>maxMaterias){
+            tmp=new Materia*[maxMaterias=cantidadMaterias+1];
+            delete[]materias;
+            materias=tmp;
+        }
+        for(int i=0;i<cantidadMaterias; i++){
+            materias[i]= new Materia(vacio, vacio, vacio, vacio, 0, 0);
             getline(archivo, cadena, DELIMITADOR_REGISTROS);
             posInicio=0;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal);
-            materias[cantidadMaterias]->setNombre(convertirStringAChar(subCadena, subCadenaChar));
+            materias[i]->setNombre(convertirStringAChar(subCadena, subCadenaChar));
 
             posInicio=posFinal+1;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal-posInicio);
-            materias[cantidadMaterias]->setAcronimoMateria(convertirStringAChar(subCadena, subCadenaChar));
+            materias[i]->setAcronimoMateria(convertirStringAChar(subCadena, subCadenaChar));
 
             posInicio=posFinal+1;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal-posInicio);
-            materias[cantidadMaterias]->setNombreProfesor(convertirStringAChar(subCadena, subCadenaChar));
+            materias[i]->setNombreProfesor(convertirStringAChar(subCadena, subCadenaChar));
 
             posInicio=posFinal+1;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal-posInicio);
-            materias[cantidadMaterias]->setDiasDeLaSemana(convertirStringAChar(subCadena, subCadenaChar));
+            materias[i]->setDiasDeLaSemana(convertirStringAChar(subCadena, subCadenaChar));
 
             posInicio=posFinal+1;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal-posInicio);
-            materias[cantidadMaterias]->setHoraInicio(convertirCadenaAEntero(subCadena));
+            materias[i]->setHoraInicio(convertirCadenaAEntero(subCadena));
 
             posInicio=posFinal+1;
             posFinal=cadena.find_first_of(DELIMITADOR_CAMPOS, posInicio);
             subCadena=cadena.substr(posInicio, posFinal-posInicio);
-            materias[cantidadMaterias]->setHoraFin(convertirCadenaAEntero(subCadena));
-            cantidadMaterias++;
+            materias[i]->setHoraFin(convertirCadenaAEntero(subCadena));
         }
         archivo.close();
     }else{
