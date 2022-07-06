@@ -60,6 +60,7 @@ int elegirOpcionMenu(){
     cout << "6) Busqueda de materia" << endl;
     cout << "7) Guardar" << endl;
     cout << "8) Salir" << endl;
+    cout << "-> ";
     cin >> opcion;
     return opcion;
 }

@@ -86,7 +86,8 @@ void listarMaterias();
 void espacios(int longitudPalabra, int limite);
 void consultarMateria();
 bool registroMateriasTieneDatos(int indice);
-void mostrarMateria(int indice);
+void mostrarMateria(int i);
+void imprimirMateria(int i);
 void darBajaMateria();
 void copiarProximoObjetoMateria(int indice);
 void cambiarDatosMateria();
@@ -146,15 +147,7 @@ void listarMaterias(){
         cout << "Acrónimo|Nombre\t\t\t|Profesor\t\t|Días\t|Inicio\t|Fin\t|" << endl;
         cout << "---------------------------------------------------------------------------------\n";
         for(int i=0; i<cantidadMaterias; i++){
-            cout << materias[i]->getAcronimoMateria() << "\t|";
-            cout << materias[i]->getNombre();
-            espacios(strlen(materias[i]->getNombre()), TAMANIO_NOMBRE_MATERIA-1);
-            cout << materias[i]->getNombreProfesor();
-            espacios(strlen(materias[i]->getNombreProfesor()), TAMANIO_NOMBRE_PROFESOR-2);
-            cout << materias[i]->getDiasDeLaSemana() << "\t|";
-            cout << materias[i]->getHoraInicio() << "\t|";
-            cout << materias[i]->getHoraFin() << "\t|";
-            cout << "\n---------------------------------------------------------------------------------\n";
+            imprimirMateria(i);
         }
 
     }else{
@@ -192,14 +185,24 @@ bool registroMateriasTieneDatos(int indice){
     return tieneDatos;
 }
 
-void mostrarMateria(int indice){
-    cout << "Registro de materia " << indice+1 << endl;
-    cout << "Nombre de la materia: " << materias[indice]->getNombre() << endl;
-    cout << "Acronimo de la materia: " << materias[indice]->getAcronimoMateria() << endl;
-    cout << "Nombre del profesor: " << materias[indice]->getNombreProfesor() << endl;
-    cout << "Días de la semana: " << materias[indice]->getDiasDeLaSemana() << endl;
-    cout << "Hora de inicio: " << materias[indice]->getHoraInicio() << endl;
-    cout << "Hora de fin: " << materias[indice]->getHoraFin() << endl;
+void mostrarMateria(int i){
+    cout << "Registro de materia " << i+1 << endl;
+    cout << "---------------------------------------------------------------------------------\n";
+    cout << "Acrónimo|Nombre\t\t\t|Profesor\t\t|Días\t|Inicio\t|Fin\t|" << endl;
+    cout << "---------------------------------------------------------------------------------\n";
+    imprimirMateria(i);
+}
+
+void imprimirMateria(int i){
+    cout << materias[i]->getAcronimoMateria() << "\t|";
+    cout << materias[i]->getNombre();
+    espacios(strlen(materias[i]->getNombre()), TAMANIO_NOMBRE_MATERIA-1);
+    cout << materias[i]->getNombreProfesor();
+    espacios(strlen(materias[i]->getNombreProfesor()), TAMANIO_NOMBRE_PROFESOR-2);
+    cout << materias[i]->getDiasDeLaSemana() << "\t|";
+    cout << materias[i]->getHoraInicio() << "\t|";
+    cout << materias[i]->getHoraFin() << "\t|";
+    cout << "\n---------------------------------------------------------------------------------\n";
 }
 
 void darBajaMateria(){
@@ -246,7 +249,7 @@ void cambiarDatosMateria(){
     int i;
     if(cantidadMaterias!=C_0){
         cout << "***CAMBIO DE DATOS DE UNA MATERIA***" << endl;
-        cout << "Indica el numero de registro a modificar-> ";
+        cout << "Indica el numero de registro a modificar (1 a " << cantidadMaterias << "): ";
         cin >> i;
         i--;
         cout << endl;
@@ -269,11 +272,15 @@ void buscarMaterias(){
     cin.getline(claveBuscada, TAMANIO_ACRONIMO_MATERIA+1);
     for(int i=0; i<cantidadMaterias; i++){
         if(!strcmp(claveBuscada, materias[i]->getAcronimoMateria())){
-            mostrarMateria(i);
-            cout << endl;
+            if(cantidadMateriasEncontradas==C_0){
+                mostrarMateria(i);
+            }else{
+                imprimirMateria(i);
+            }
             cantidadMateriasEncontradas++;
         }
     }
+    cout << endl;
     if(cantidadMateriasEncontradas){
         cout << "Se encontraron un total de " << cantidadMateriasEncontradas << endl;
     }else{
